@@ -4,6 +4,9 @@
 #include <iterator>
 #include <vector>
 #include <fstream>
+#include <random>
+#include <ctime>
+#include <functional>
 using namespace std;
 
 template <typename T>
@@ -245,13 +248,23 @@ public:
         out<<endl;
         out.close();
     }
+
+    void sort() {
+        std::sort(data, data +number);
+    }
 };
 int main()
 {
+    default_random_engine e(time(nullptr));
+    uniform_int_distribution<> dis(1, 100);
     SequenceList<int> seq;
-    for(int i = 0; i < 12; i++)
-        seq.push_back(std::move(i));
-    seq.insert_before(0, -1);
+    auto div = std::bind(dis, e);
+    for(int i = 0; i < 10; i++)
+        seq.push_back(std::move(div()));
+    seq.show_data();
+    seq.sort();
+    seq.show_data();
+    /*seq.insert_before(0, -1);
     seq.insert_after(11, 12);
     seq.show_data();
     SequenceList<int> seq1("in.txt");
@@ -264,6 +277,6 @@ int main()
     cout << boolalpha << (seq3 <= seq) << noboolalpha << endl;
     SequenceList<int> seq4 = {1, 2, 3, 4};
     seq += seq4;
-    seq.show_data();
+    seq.show_data();*/
     return 0;
 }
